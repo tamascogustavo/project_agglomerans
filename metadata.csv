@@ -1,0 +1,22 @@
+﻿Linhagens benéficas;;;;;;;
+Linhagem;RefSeq;Scaffolds Genoma;Plasmideos;Função;Publicação;Endereço;Observação
+L15;GCF_003860325.1;1;3;Biocontrol;https://www.cabdirect.org/cabdirect/abstract/20143387909;https://www.ncbi.nlm.nih.gov/assembly/GCF_003860325.1/;-
+UAEU18;GCF_010523255.1;1;3;PGPB;https://journals.asm.org/doi/epub/10.1128/MRA.00174-20;https://www.ncbi.nlm.nih.gov/assembly/GCF_010523255.1/;-
+P5;GCF_002157425.2;127;-;PGPB;https://www.nature.com/articles/s41598-017-15820-9;https://www.ncbi.nlm.nih.gov/assembly/GCF_002157425.2;-
+C1;GCF_009759885.1;21;-;PGPB;https://www.mdpi.com/2076-2607/8/2/153/htm;https://www.ncbi.nlm.nih.gov/assembly/GCF_009759885.1/;-
+P10c;GCF_001288285.1;18;2;Biocontrol;https://journals.asm.org/doi/full/10.1128/genomeA.01448-15;https://www.ncbi.nlm.nih.gov/assembly/GCF_001288285.1/;-
+ANP8;GCF_017315165.1;1390;-;PGPB;https://www.sciencedirect.com/science/article/pii/S2215017X21000163;https://www.ncbi.nlm.nih.gov/assembly/GCF_017315165.1/;Muito fragmentado - Talvez não usar?
+Pa;GCF_002082355.1;45;-;PGPB;https://www.mdpi.com/1422-0067/20/16/3989/htm;https://www.ncbi.nlm.nih.gov/assembly/GCF_002082355.1;Depositado como Pantoea vagans
+R190;GCF_000731125.1;5;3;Biocontrol;https://www.sciencedirect.com/science/article/pii/S0168165614007858?casa_token=OB-IxpcWM3EAAAAA:CFUgSc8YOlUfVpe_IAV65LfbDWIfBkRm849X4gXZXBxoWT-4P6VSUgltpSFY-S7rJXA1OLEwWO4X;https://www.ncbi.nlm.nih.gov/assembly/GCF_000731125.1;-
+LMAE-2;GCF_000814075.1;155;-;Bioremediation;https://journals.asm.org/doi/full/10.1128/genomeA.00525-16;https://www.ncbi.nlm.nih.gov/assembly/GCF_000814075.1;Considerar essa?
+4;GCF_000743785.2;4;-;Biocontrol;https://journals.asm.org/doi/full/10.1128/genomeA.00511-16;https://www.ncbi.nlm.nih.gov/assembly/GCF_000743785.2;-
+E325;GCF_014353865.1;162;-;Biocontrol;https://apsjournals.apsnet.org/doi/abs/10.1094/PHYTO-09-10-0253;https://www.ncbi.nlm.nih.gov/assembly/GCF_014353865.1/;-
+;;;;;;;
+Linhagens prejudiciais;;;;;;;
+Linhagem;RefSeq;Scaffolds Genoma;Plasmideos;Função;Publicação;Endereço;Observação
+KM1;GCF_012241415.1;46;3;Oportunistic pathogen;https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0239792;https://www.ncbi.nlm.nih.gov/assembly/GCF_012241415.1/;-
+BD 1274;GCF_003369505.1;246;-;Pathogen of onion;https://journals.asm.org/doi/epub/10.1128/MRA.01507-19;https://www.ncbi.nlm.nih.gov/assembly/GCF_003369505.1;-
+824-1;GCF_001661985.1;55;-;Gall-forming;https://bsppjournals.onlinelibrary.wiley.com/doi/full/10.1111/mpp.12528;https://www.ncbi.nlm.nih.gov/assembly/GCF_001661985.1/;-
+4188;GCF_001662025.1;79;-;Gall-forming;https://bsppjournals.onlinelibrary.wiley.com/doi/full/10.1111/mpp.12528;https://www.ncbi.nlm.nih.gov/assembly/GCF_001662025.1/;-
+Tx10;GCF_000475055.1;22;-;Cystic fibrosis;https://journals.asm.org/doi/full/10.1128/genomeA.00904-13;https://www.ncbi.nlm.nih.gov/assembly/GCF_000475055.1/#/st;-
+DAPP-PG 734;GCF_000710215.1;195;-;Related with Olive knot;https://journals.asm.org/doi/10.1128/genomeA.00774-14;https://www.ncbi.nlm.nih.gov/assembly/GCF_000710215.1;-
