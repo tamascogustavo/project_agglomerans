@@ -1,4 +1,0 @@
-#FILE	SEQUENCE	START	END	GENE	COVERAGE	COVERAGE_MAP	GAPS	%COVERAGE	%IDENTITY	DATABASE	ACCESSION
-Pant_gen.fna	ctg.s1.000000F.arrow_pilon	1089209	1090212	(Bla)AmpH	103-1106/1161	.=======/======	8/10	86.05	77.502	argannot	CP003785:4208384-4209544
-Pant_gen.fna	ctg.s1.000000F.arrow_pilon	2126636	2129756	(Flq)OqxBgb	1-3121/3153	===============	0/0	98.99	83.371	argannot	EU370913:47851-51003
-Pant_gen.fna	ctg.s1.000000F.arrow_pilon	2893087	2894903	(Bla)Penicillin_Binding_Protein_Ecoli	46-1862/1902	========/======	6/8	95.32	76.496	argannot	CP002291:664439-666340
