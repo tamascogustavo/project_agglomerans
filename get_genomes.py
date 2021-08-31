@@ -18,6 +18,12 @@ import subprocess
 #functions and classes
 
 def parse_refseqs(info):
+    '''
+    This function will get the refseqs from a csv file
+
+    retun: a list of all refseqs
+
+    '''
     all_info = []
     for line in info:
         newline = line.strip().split(";")[1]
@@ -25,6 +31,12 @@ def parse_refseqs(info):
     return all_info
 
 def generate_metadata_assembly(out_file):
+    '''
+    This function will the inital metadata
+
+    Return a file with all the the refsummary
+    
+    '''
     if os.path.exists(out_file):
         print("{} was already generated".format(out_file))
     else:
@@ -35,6 +47,8 @@ def generate_metadata_assembly(out_file):
 
 def get_download_links(lib, target, links):
     '''
+
+    This function will produce the links for download
     '''
     cmd = "grep -E '{}' {} | cut -f 20".format(target, lib)
     link = subprocess.check_output(cmd, shell=True, text=True)
@@ -44,6 +58,10 @@ def get_download_links(lib, target, links):
     links.append(final_link)
     
 def download(links):
+    '''
+    This function will download all the genome files
+
+    '''
     for link in links:
         out_name = link.split("/")[-1]
         if os.path.exists(out_name):

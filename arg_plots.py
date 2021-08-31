@@ -3,9 +3,6 @@
 Author:GustavoTamasco
 Scripttorun:
 
-Thescripttakes:
-
-Runthecodeby:ex_p5.py<reference_fasta_file><related_fasta_file>
 """
 
 #importstatements
@@ -126,6 +123,7 @@ def parse_genes(arg_db):
 
 
 def get_all_genes(metadata):
+
     all_genes = []
     for k, v in metadata.items():
         for gene in v:
@@ -133,6 +131,13 @@ def get_all_genes(metadata):
     return all_genes
 
 def build_class_df(df_info, classes, metadata):
+    '''
+    Creates a dictionary of organism and their genes
+
+    df_info = if a dict that is updated
+    classes = a list of all possible genes across all genomes
+    metadata = dict of k= organism and v= the present genes
+    '''
     for organism, genes in metadata.items():
         #organism_classes = sorted(([s[s.find("(") + 1:s.find(")")] for s in genes]))
         abundance = Counter(genes)
@@ -144,6 +149,12 @@ def build_class_df(df_info, classes, metadata):
   
 
 def get_array(genes_dict, classes):
+    '''
+    Build the individual array for each organism 
+
+    If the organism has a gene, it receives the count 
+    If not receives 0 
+    '''
     array = []
     for x in classes:
         if x in genes_dict.keys():
@@ -154,6 +165,9 @@ def get_array(genes_dict, classes):
     return (array)
 
 def parse_arg(path, meta):
+    '''
+     Parse arg info from the file and build a dictionary
+    '''
 
     arg_genes = []
     arg_file = str([file for file in list_files_simple(path) if "_argannot.tsv" in file])
@@ -166,7 +180,49 @@ def parse_arg(path, meta):
                 name = file_path.strip().split("/")[-1][0:-13]
                 meta[name] = arg_genes
     return(meta)
-            
+
+
+def parse_card(path, meta):
+
+    '''
+     Parse card info from the file and build a dictionary
+    '''
+
+
+    arg_genes = []
+    arg_file = str([file for file in list_files_simple(path) if "_card.tsv" in file])
+    file_path = "{}/{}".format(path,arg_file[2:-2])
+    with open(file_path) as arg:
+        for line in arg:
+            if not line.startswith("#FILE"):
+                ident = float(line.strip().split()[9])
+                if ident >= 60:
+                    info = line.strip().split()[4]
+                    arg_genes.append(info)
+                    name = file_path.strip().split("/")[-1][0:-9]
+                    meta[name] = arg_genes
+    return(meta)
+
+def parse_vir(path, meta):
+    '''
+     Parse vir info from the file and build a dictionary
+    '''
+
+
+    arg_genes = []
+    arg_file = str([file for file in list_files_simple(path) if "_vfdb.tsv" in file])
+    file_path = "{}/{}".format(path,arg_file[2:-2])
+    with open(file_path) as arg:
+        for line in arg:
+            if not line.startswith("#FILE"):
+                ident = float(line.strip().split()[9])
+                if ident >= 60:
+                    info = line.strip().split()[4]
+                    arg_genes.append(info)
+                    name = file_path.strip().split("/")[-1][0:-9]
+                    meta[name] = arg_genes
+    return(meta)
+   
 
 def main():
 
@@ -177,14 +233,24 @@ def main():
     dirpath=os.getcwd()
     file_path = "{}/agr_vir".format(dirpath)
     directories = list_directories(file_path)
-    
+    '''
+    ARG analysis
+
+    '''
 
     #Get all agr info
     metadata_arg = {}
+
+    metadata_card = {}
+
+    metadata_vir = {}
+
     for organism in directories:
         if ".DS_Store" not in organism:
             organism_path = "{}/{}".format(file_path, organism)
             parse_arg(organism_path, metadata_arg)
+            parse_card(organism_path, metadata_card)
+            parse_vir(organism_path, metadata_vir)
 
     #Get all possible genes
 
@@ -197,93 +263,107 @@ def main():
 
     df_major_classes = build_class_df(df_info, all_genes, metadata_arg)
     df = pd.DataFrame.from_dict(df_major_classes, orient='index', columns=['(Bla)AmpH', '(Bla)Penicillin_Binding_Protein_Ecoli', '(Flq)OqxBgb', '(Phe)CatB4'])
+    #df.to_csv("pantoea_arg.csv")
+    #scale
+    sns.set(font_scale=0.5)
+    
+    ##Plots
+    sns.set_context("talk", font_scale=0.4)
+    bar_plot = df.plot.barh(stacked=True, colormap='vlag')
+    plt.legend(bbox_to_anchor=(0.6, 0.95), loc='upper left', borderaxespad=0)
+    
+    #plt.show()
+    sns.set_color_codes()
+    cluster_plot = sns.clustermap(data=df, method="single", cmap="vlag")
+    cluster_plot.fig.subplots_adjust(right=0.7)
+    cluster_plot.ax_cbar.set_position((0.8, .2, .03, .4))
+    
+    #plt.show()
+    
+
+    
+    bar_plot.figure.savefig("arg_barplot.pdf", bbox_inches='tight')
+    cluster_plot.savefig("arg_cluster.pdf", bbox_inches='tight')
+
+
+
+
+    '''
+    Card analysis
+
+    '''
+    
+    all_card_genes = parse_genes(metadata_card)
+    all_card_genes = sorted(all_card_genes)
+
+    
+    #Build dataframe
+
+    df__card_info = {}
+
+    df_major_card_classes = build_class_df(df__card_info, all_card_genes, metadata_card)
+    df_card = pd.DataFrame.from_dict(df_major_card_classes, orient='index', columns=['CRP', 'Escherichia_coli_emrE', 'H-NS', 'Streptomyces_cinnamoneus_EF-Tu_mutants_conferring_resistance_to_elfamycin', 'YojI', 'acrB', 'aminocoumarin_resistant_alaS', 'aminocoumarin_resistant_cysB', 'arnA', 'bacA', 'baeR', 'cpxA', 'cpxR', 'emrB', 'emrR', 'mdtB', 'mdtC', 'mdtD', 'mexB', 'mexN', 'mfd', 'msbA', 'oqxB', 'sdiA', 'smeB', 'tolC', 'vgaC'])
+    df_card.to_csv("pantoea_card.csv")   
     #scale
     sns.set(font_scale=0.65)
     
     ##Plots
-
-    bar_plot = df.plot.barh(stacked=True, colormap='vlag')
+    sns.set_context("talk", font_scale=0.4)
+    bar_plot_card = df_card.plot.barh(stacked=True, colormap='vlag')
+    plt.legend(bbox_to_anchor=(1.01, 0.95), loc='upper left', borderaxespad=0)
     
-    #plt.show()
     sns.set_color_codes()
-    sns.clustermap(data=df, method="single", cmap="vlag")
-    plt.show()
+    cluster_plot_card = sns.clustermap(data=df_card, method="single", cmap="vlag")
+    cluster_plot_card.fig.subplots_adjust(right=0.9)
+    cluster_plot_card.ax_cbar.set_position((1.01, .2, .03, .4))
 
-    #cmap="RdYlBu_r"
+    #plt.show()
 
+    ## Save all plots
 
-    """
-    fig = plt.figure(figsize=(12,8))
-    ax = plt.axes(projection='3d')
+    bar_plot_card.figure.savefig("card_barplot.pdf", bbox_inches='tight')
+    cluster_plot_card.savefig("card_cluster.pdf", bbox_inches='tight')
 
-    sctt = ax.scatter3D(X_pca_3[:, 0], X_pca_3[:, 1], X_pca_3[:, 2], c = df, s = 50, alpha=0.6)
+    
 
-    plt.title("3D scatterplot", pad=15)
-    ax.set_xlabel("First PCA")
-    ax.set_ylabel("Second PCA")
-    ax.set_zlabel("Third PCA")
+    '''
+    Vir analysis
 
-    plt.savefig("3D_scatterplot.pdf")
-   
+    '''
+    
+    all_vir_genes = parse_genes(metadata_vir)
+    all_vir_genes = sorted(all_vir_genes)
 
-    #full_plot.savefig("plasmid_arg.pdf", bbox_inches='tight')
-    #not_full.savefig("plasmid_arg_scale1.pdf", bbox_inches='tight')
+    
+    #Build dataframe
 
-    """
+    df__vir_info = {}
+
+    df_major_vir_classes = build_class_df(df__vir_info, all_vir_genes, metadata_vir)
+    df_vir = pd.DataFrame.from_dict(df_major_vir_classes, orient='index', columns=['astA', 'cheA', 'cheD', 'cheW', 'cheY', 'cheZ', 'clpV1', 'entB', 'flgD', 'flgE', 'flhA', 'flhC', 'flhD', 'fliA', 'fliC', 'fliG', 'fliI', 'fliM', 'fliN', 'fliP', 'icmF1/tssM1', 'luxS', 'ompA', 'pilL', 'pscR', 'tsr', 'tssH-5/clpV', 'vgrG1a', 'vgrG1b'])
+    #scale
+    #df_vir.to_csv("pantoea_vir.csv")
+    sns.set(font_scale=0.65)
+    
+    ##Plots
+    sns.set_context("talk", font_scale=0.4)
+    bar_plot_vir = df_vir.plot.barh(stacked=True, colormap='vlag')
+    plt.legend(bbox_to_anchor=(1.01, 0.95), loc='upper left', borderaxespad=0)
+    
+    sns.set_color_codes()
+    cluster_plot_vir = sns.clustermap(data=df_vir, method="single", cmap="vlag")
+    cluster_plot_vir.fig.subplots_adjust(right=0.68)
+    cluster_plot_vir.ax_cbar.set_position((0.8, .2, .03, .4))
+
+    
+    ## Save all plots
+
+    bar_plot_vir.figure.savefig("vir_barplo.pdf", bbox_inches='tight')
+    cluster_plot_vir.savefig("vir_cluster.pdf", bbox_inches='tight')
+
 
         
 
-
-    """
-    '''Plasmids'''
-    plasmid_path = "{}{}".format(path_to_all_info,directories[1])
-    os.chdir(plasmid_path)
-    plasmid_dir = list_directories(plasmid_path)
-    for organism in plasmid_dir:
-        arg_files = list_files(all_file_path,plasmid_path,organism)
-    print_status(arg_files)
-
-
-    '''Building a dir of fna files'''
-    plasmid_arg_path = "{}/plasmid_argannot_files".format(dirpath)
-    create_genomes_dir(plasmid_arg_path)
-    os.chdir(plasmid_arg_path)
-    for file in arg_files:
-        move_file(file, plasmid_arg_path)
-
-    '''Building metadata'''
-    #All genes to each genome
-    plasmid_agr_metadata = {}
-    plasmid_arg = list_files_simple(plasmid_arg_path)
-    for f in plasmid_arg:
-        with open(f) as plasmid_arg_info:
-            parse_genes(f, plasmid_arg_info, plasmid_agr_metadata)
-    #All genes that occured
-    all_genes = sorted(set(get_all_genes(plasmid_agr_metadata)))
-
-    #All arg classes
-    all_arg_classes = list(filter(None,sorted(set([s[s.find("(")+1:s.find(")")] for s in all_genes]))))
-    print(all_arg_classes)
-
-    '''Build dataframe for the classes plot'''
-    df_info = {}
-
-    df_major_classes = build_class_df(df_info, all_arg_classes, plasmid_agr_metadata)
-    df = pd.DataFrame.from_dict(df_major_classes, orient='index', columns=['AGly', 'AGly/Flqn', 'Bla', 'Flq', 'MLS', 'Phe', 'PheCmlB', 'Rif', 'Sul', 'Tet', 'Tmt'])
-    #df = df.transpose()
-    #df.to_csv('arg_genes.csv', sep='\t', encoding='utf-8')
-    sns.set(font_scale=0.65)
-    # Need both
-    not_full = sns.clustermap(df, label='small', cmap="vlag", standard_scale=1, linewidths=0)
-    full_plot = sns.clustermap(df, label='small', cmap="vlag", linewidths=0)
-    # plt.title('Antibiotic resistance genes across 34 organism', fontsize=15)
-    # sns.set(font_scale=1)
-    plt.show()
-    full_plot.savefig("plasmid_arg.pdf", bbox_inches='tight')
-    not_full.savefig("plasmid_arg_scale1.pdf", bbox_inches='tight')
-
-
-    """
 
 
 
